@@ -56,13 +56,15 @@
 				        <table>
 							<thead>
 				            <tr>
-				                <th>Good Links</th>
+				                <th>Internal Links</th>
 				            </tr>
 							</thead>
 							
 							<tbody>
-				            <tr th:each="link : ${links}">
-				                <td><a href="#" th:text="${link}" th:href="${link}">link...</a></td>
+				            <tr th:each="link : ${internal_links}">
+				                <td>
+				                    <a href="#" th:text="${link[0]}" th:href="${link[0]}"></a>
+				                    links to <a th:text="${link[1]}" th:href="${link[1]}"></a></td>
 				            </tr>
 							</tbody>
 				        </table>

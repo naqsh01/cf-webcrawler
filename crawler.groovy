@@ -16,6 +16,7 @@ class Crawler implements CommandLineRunner {
     
     def links = []
     def dead_links = []
+	def internal_links =[]
 	def external_links =[]
 	def image_links =[]
     def paths = [:]
@@ -46,7 +47,7 @@ class Crawler implements CommandLineRunner {
         return strip("http://${link}")
     }
 
-    def scan_for_links(url, links, dead_links, external_links, image_links, paths, levels) {
+    def scan_for_links(url, links, internal_links, dead_links, external_links, image_links, paths, levels) {
         levels += 1
         if (level_limit > 0 && levels > level_limit) {
             log.info "You have exceeded the limit of ${level_limit}. Dropping back"
@@ -79,20 +80,22 @@ class Crawler implements CommandLineRunner {
 
         if (local_links.size() > 0) {
             for (link in local_links) {
-                if (link.contains(domain)) {
+                // TODO: Change to REGEX and include PDF, etc 
+			    if ( (link.contains(".png")) || link.contains(".jpg") ){
+						image_links << [url, link]
+						continue
+				} else if (link.contains(domain)) {
                     def hostname = new URL(link).host
                     //log.info "Checking ${excluded_domains} for ${hostname}"
                     if (excluded_domains.contains(hostname)) {
                         log.info "${hostname} is on the excluded list, so skipping"
                         continue
-                    } else if ( (link.contains(".png")) || link.contains(".jpg") ){
-						image_links << [url, link]
-						continue
 					} else {
                         //log.info "${hostname} is NOT excluded, so going deeper"
+						internal_links << [url, link]
                     }
                     try {
-                        scan_for_links(link, links, dead_links, external_links, image_links, paths, levels)
+                        scan_for_links(link, links, internal_links, dead_links, external_links, image_links, paths, levels)
                         if (paths.containsKey(link)) {
                             paths[link] << url
                         } else {
@@ -129,23 +132,29 @@ class Crawler implements CommandLineRunner {
         
         def base = "http://${domain}"
         log.info("Domain is ${domain}")
-        scan_for_links(base, links, dead_links, external_links, image_links, paths, levels)
+        scan_for_links(base, links, internal_links, dead_links, external_links, image_links, paths, levels)
         log.info "============ GOOD ======================"
         links.sort()
         for (link in links) {
             log.info link
         }
+				
         log.info "============ BAD ======================"
         for (link in dead_links) {
             log.info "${link[0]} -> ${link[1]}"
         }
-		
+	
+        log.info "============ LOCAL ======================"
+        for (link in internal_links) {
+            log.info "${link[0]} -> ${link[1]}"
+        }
+	
         log.info "============ IMAGES ===================="
         for (link in image_links) {
             log.info link
         }		
 		
-        log.info "============ EXTERNAL=================="
+        log.info "============ EXTERNAL =================="
         for (link in external_links) {
             log.info "${link[0]} -> ${link[1]}"
         }		
@@ -166,6 +175,14 @@ class Crawler implements CommandLineRunner {
         "good"
     }
 
+   @RequestMapping("/internal")
+    String local(Map<String, Object> model) {
+        model.put("domain", "http://${domain}")
+        model.put("internal_links", internal_links)
+        "internal"
+    }
+	
+	
     @RequestMapping("/external")
     String external(Map<String, Object> model) {
         model.put("domain", "http://${domain}")
