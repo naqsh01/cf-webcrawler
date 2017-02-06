@@ -26,6 +26,7 @@ A step by step series of examples that tell you have to get a development env ru
 
 ### How to Run Locally
 ```
+
 > spring run crawler.groovy -- --domain=google.com
 ```
 The service will begin to crawl google.com and categorize the links. Port 8080 must be available on the localhost. Open your browser to: 
@@ -34,6 +35,12 @@ The service will begin to crawl google.com and categorize the links. Port 8080 m
 http://localhost:8080
 ```
 ![image](https://cloud.githubusercontent.com/assets/3868736/22636824/f3e553c0-ec0b-11e6-878a-2e8e862b83aa.png)
+
+You can can restrict search by specifying a level
+```
+> spring run crawler.groovy -- --domain=google.com --depth=1
+```
+This will only navigate down one level. Any links below that will not be visited.
 
 ## Run on Pivotal Cloud Foundry
 Once you've verified the source builds and runs properly locally it's time to push it on Cloud Foundry. Cloud Foundry is an open source cloud platform as a service (PaaS) on which developers can build, deploy, run and scale applications on public and private cloud models.
@@ -157,7 +164,7 @@ You can also scale vertically. Scaling the app vertically changes the disk space
 
 
 # Continuous Delivery
-This solution has a fully automated CD environemnt. Demo is available upon request. 
+In order to reduce operation overheard, automation is important. Demo is available upon request. 
 
 ## Automating BUILD, TEST, and DEPLOYMENT
 ![image](https://cloud.githubusercontent.com/assets/3868736/22637399/9fc27c88-ec0f-11e6-8624-e81f2726d582.png)
