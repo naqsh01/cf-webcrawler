@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents** 
+
+- [CF Web Crawler](#cf-web-crawler)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installing](#installing)
+    - [How to Run Locally](#how-to-run-locally)
+  - [Run on Pivotal Cloud Foundry](#run-on-pivotal-cloud-foundry)
+    - [Deploy to Cloud Foundry](#deploy-to-cloud-foundry)
+    - [View Logs](#view-logs)
+    - [High Availability](#high-availability)
+      - [How to Scale Up](#how-to-scale-up)
+- [Continuous Delivery](#continuous-delivery)
+  - [Automating BUILD, TEST, and DEPLOYMENT](#automating-build-test-and-deployment)
+    - [Set up your GitHub Repository](#set-up-your-github-repository)
+    - [Configure Jenkins to monitor code pushes to GitHub and Deploy to Cloud Foundry](#configure-jenkins-to-monitor-code-pushes-to-github-and-deploy-to-cloud-foundry)
+  - [Authors](#authors)
+  - [Acknowledgments](#acknowledgments)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # CF Web Crawler
 
 Highly scalable and always available Spring based web crawler deployed on the Cloud Foundry PaaS. 
@@ -198,7 +221,7 @@ Now when ever you push code from your local machine to your remote repository on
 
 ## Authors
 
-* **Shozab Naqvi** - *Initial work* - [PurpleBooth](https://github.com/naqsh01)
+* **Shozab Naqvi** - *Initial work* - [Github](https://github.com/naqsh01)
 
 ## Acknowledgments
 
