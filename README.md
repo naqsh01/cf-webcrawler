@@ -1,4 +1,7 @@
 # CF Web Crawler
+
+Highly scalable and always available Spring based web crawler deployed on the Cloud Foundry PaaS. 
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents** 
@@ -21,10 +24,6 @@
   - [Acknowledgments](#acknowledgments)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# CF Web Crawler
-
-Highly scalable and always available Spring based web crawler deployed on the Cloud Foundry PaaS. 
 
 ## Getting Started
 
