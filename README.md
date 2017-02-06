@@ -1,4 +1,4 @@
-# Cloud Foundry Web Crawler
+# CF Web Crawler
 
 Highly scalable and always available Spring based web crawler deployed on the Cloud Foundry PaaS. 
 
@@ -33,6 +33,7 @@ The service will begin to crawl google.com and categorize the links. Port 8080 m
 ```
 http://localhost:8080
 ```
+![image](https://cloud.githubusercontent.com/assets/3868736/22636824/f3e553c0-ec0b-11e6-878a-2e8e862b83aa.png)
 
 ## Run on Pivotal Cloud Foundry
 Once you've verified the source builds and runs properly locally it's time to push it on Cloud Foundry. Cloud Foundry is an open source cloud platform as a service (PaaS) on which developers can build, deploy, run and scale applications on public and private cloud models.
@@ -106,68 +107,95 @@ Output:
 2017-02-06T01:07:07.94-0500 [APP/PROC/WEB/0]OUT 2017-02-06 06:07:07.948  INFO 51 --- [       runner-0] com.shozab.Crawler                       : http://www.instagram.com/cnntonight leaves this domain, so not crawling
 2017-02-06T01:07:07.94-0500 [APP/PROC/WEB/0]OUT 2017-02-06 06:07:07.948  INFO 51 --- [       runner-0] com.shozab.Crawler                       : Crawling http://cnn.com/videos/us/2017/01/24/minnesota-governor-mark-dayton-collapses-vo-lemon-ctn.cnn
 2017-02-06T01:07:08.39-0500 [APP/PROC/WEB/0]OUT 2017-02-06 06:07:08.397  INFO 51 --- [       runner-0] com.shozab.Crawler                       : Crawling http://cnn.com/videos/world/2017/01/26/mexico-president-will-not-pay-for-wall-santiago-ctn.cnn
-2017-02-06T01:07:08.68-0500 [APP/PROC/WEB/0]OUT 2017-02-06 06:07:08.683  INFO 51 --- [       runner-0] com.shozab.Crawler                       : Crawling http://cnn.com/videos/politics/2017/01/25/donald-trump-immigration-border-mexico-wall-executive-order-zeleny-ctn.cnn
+2017-02-06T01:07:08.68-0500 [APP/PROC/WEB/0]OUT 2017-02-06 06:07:08.683  INFO 51 --- [       runner-0] com.shozab.Crawler                       : Crawling http://cnn.com/videos/politics/2017/01/25/donald-trump-immigration-border-mexico-wall-ex
+
+Increase the number of app instances from one to two:ecutive-order-zeleny-ctn.cnn
 2017-02-06T01:07:09.23-0500 [APP/PROC/WEB/0]OUT 2017-02-06 06:07:09.231  INFO 51 --- [       runner-0] com.shozab.Crawler                       : Crawling http://cnn.com/videos/politics/2017/01/14/jeff-jeans-obamacare-saved-life-didnt-understand-paul-ryan-sot-ctn.cnn
 2017-02-06T01:07:09.73-0500 [APP/PROC/WEB/0]OUT 2017-02-06 06:07:09.731  INFO 51 --- [       runner-0] com.shozab.Crawler                       : Crawling http://cnn.com/videos/tv/2017/01/05/donald-trump-julian-assange-james-woolsey-panel-ctn.cnn
 2017-02-06T01:07:10.14-0500 [APP/PROC/WEB/0]OUT 2017-02-06 06:07:10.146  INFO 51 --- [       runner-0] com.shozab.Crawler                       : Crawling http://cnn.com/videos/politics/2017/01/04/donald-trump-intelligence-briefing-russian-hack-vo-ctn.cnn
 ```
 
+### High Availability
+You can assure high avaialabilty by scaling the application. You can scale the application in several ways; for example you can increase the number instances of the application. Cloud Foundry will assure there are at least X number of instances running of the CF WebCrawler. If one of the instances goes down, Cloud Foundry will automatically start up and another instance, rebalancing the load. 
 
+#### How to Scale Up
+Increasing the available disk space or memory can improve overall app performance. Similarly, running additional instances of the app can allow cf webcrawler to handle increases in user load and concurrent requests. These adjustments are called scaling.
 
-## Running the tests
+Scaling the app horizontally adds or removes app instances. Adding more instances allows the application to handle increased traffic and demand.
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+Increase the number of app instances from one to two:
 ```
-Give an example
-```
-```
+> cf scale cf-webcrawler 2
 ```
 
-
-### And coding style tests
-
-Explain what these tests test and why
-
+Check the status of the app and verify there are two instances running:
 ```
-Give an example
+> cf app cf-webcrawler 
+```
+Output: 
+```
+requested state: started
+instances: 2/2
+usage: 512M x 2 instances
+urls: cf-webcrawler-anomic-ea.cfapps.io
+last uploaded: Mon Feb 6 06:03:13 UTC 2017#
+stack: cflinuxfs2
+buildpack: container-certificate-trust-store=1.0.0_RELEASE java-buildpack=v3.12-offline-https://github.com/cloudfoundry/java-buildpack.git#6f25b7e java-opts open-jdk-like-jre=1.8.0_121 open-jdk-like-memory-calculator=2.0.2_RELEASE spring-boot-cli=1.4.3_RELEASE
+
+     state     since                    cpu      memory           disk           details
+#0   running   2017-02-06 01:37:59 AM   4.4%     368.5M of 512M   152.8M of 1G
+#1   running   2017-02-06 01:42:07 AM   227.8%   354.8M of 512M   152.8M of 1G
 ```
 
-## Deployment
+You can also scale vertically. Scaling the app vertically changes the disk space limit or memory limit for each app instance.
+```
+> cf scale cf-spring -m 1G
+```
+```
+> cf scale cf-spring -k 512M
+```
 
-Add additional notes about how to deploy this on a live system
 
-## Built With
+# Continuous Delivery
+This solution has a fully automated CD environemnt. Demo is available upon request. 
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+## Automating BUILD, TEST, and DEPLOYMENT
+![image](https://cloud.githubusercontent.com/assets/3868736/22637399/9fc27c88-ec0f-11e6-8624-e81f2726d582.png)
 
-## Contributing
+Continuous Delivery is the automation of all the steps from code check all the way to deployment and delivery. Automation significantly reduces bugs found in production.
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+### Set up your GitHub Repository
+### Configure Jenkins to monitor code pushes to GitHub and Deploy to Cloud Foundry
+**Prerequisites**
+- Jenkins 
+- Git plugin
+- Cloud Foundry plugin
 
-## Versioning
+**Step 1: Create Project in Jenkins**
+- 1. Create a free style project
+- 2. Under "Source Code Management" tick "Git" and complete required information
+- 3. Under "Post Build Actions" select "Push to Cloud Foundry" and complete required information
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+**Step 2: GitHub**
+- 1. Login to the your GitHub repo
+- 2. Goto settings > integration & services and add "Add Jenkins (Git plugin)"
+
+Now when ever you push code from your local machine to your remote repository on GitHub, Jenkins will automatically build the source and deploy it on to Cloud Foundry. 
+
+
+**Step 3: Integrate Test Automations Suites with Jenkins**
+- Example [Jenkins + Selenium Integration](http://learn-automation.com/selenium-integration-with-jenkins/)
+
+![image](https://cloud.githubusercontent.com/assets/3868736/22637541/5e301202-ec10-11e6-9194-a8266592576d.png)
+
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+* **Shozab Naqvi** - *Initial work* - [PurpleBooth](https://github.com/naqsh01)
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* Application source is based on top of gregturn/spring-crawler
+* jSoup library
+
 
